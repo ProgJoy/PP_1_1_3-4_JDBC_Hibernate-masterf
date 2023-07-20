@@ -1,17 +1,23 @@
 package jm.task.core.jdbc.service;
 
+import com.mysql.cj.xdevapi.SessionFactory;
+import jm.task.core.jdbc.dao.UserDaoHibernateImpl;
 import jm.task.core.jdbc.dao.UserDaoJDBCImpl;
 import jm.task.core.jdbc.model.User;
 import jm.task.core.jdbc.util.Util;
+import org.hibernate.cfg.Configuration;
+
 
 import java.sql.SQLException;
 import java.util.List;
 
 public class UserServiceImpl extends Util implements UserService {
-    UserDaoJDBCImpl service;
+
+    //UserDaoJDBCImpl service;
+    UserDaoHibernateImpl service;
 
     public UserServiceImpl() {
-        service = new UserDaoJDBCImpl();
+        service = new UserDaoHibernateImpl();
     }
 
     public void createUsersTable() {
@@ -23,27 +29,15 @@ public class UserServiceImpl extends Util implements UserService {
     }
 
     public void saveUser(String name, String lastName, byte age) {
-        try {
-            service.saveUser(name, lastName, age);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        service.saveUser(name, lastName, age);
     }
 
     public void removeUserById(long id) {
-        try {
-            service.removeUserById(id);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        service.removeUserById(id);
     }
 
     public List<User> getAllUsers() {
-        try {
-            return service.getAllUsers();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        return service.getAllUsers();
     }
 
     public void cleanUsersTable() {
