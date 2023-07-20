@@ -13,8 +13,6 @@ public class Util {
     public Connection getConnection () {
         try {
             connection = DriverManager.getConnection(MYURL, NAME, PASS);
-            Statement statement = connection.createStatement();
-            statement.execute("insert into user (name, lastName, age) value ('Artem', 'Polmoliv', 21);\n");
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

@@ -14,14 +14,14 @@ public class UserDaoJDBCImpl extends Util implements UserDao {
     }
 
     public void createUsersTable() {
-        String sql = "CREATE TABLE user ("
+        String sql = "CREATE TABLE IF NOT EXISTS user ("
                 + "id INT AUTO_INCREMENT PRIMARY KEY,"
                 + "name VARCHAR(45) NOT NULL,"
                 + "lastName VARCHAR(45) NOT NULL,"
                 + "age INT"
                 + ") CHARSET=utf8mb3";
 
-        try (Statement statement = connection.createStatement()) {
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.executeUpdate(sql);
             System.out.println("Таблица user успешно создана в базе данных.");
 
@@ -83,28 +83,23 @@ public class UserDaoJDBCImpl extends Util implements UserDao {
         List<User> users = new ArrayList<>();
 
         String sqlSelect = "SELECT * FROM USER";
-        Statement statement = null;
-        try {
-            statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(sqlSelect);
+        //PreparedStatement statement = null;
+        try (PreparedStatement statement = connection.prepareStatement(sqlSelect);
+             ResultSet resultSet = statement.executeQuery()){
             while (resultSet.next()) {
-                User user = new User();
-                user.setId(resultSet.getLong(1));
+                User user = new User(resultSet.getString("name"),
+                        resultSet.getString("lastName"),
+                        resultSet.getByte("age"));
+                user.setId(resultSet.getLong("id"));
+/*              user.setId(resultSet.getLong(1));
                 user.setName(resultSet.getString(2));
                 user.setLastName(resultSet.getString(3));
-                user.setAge(resultSet.getByte(4));
+                user.setAge(resultSet.getByte(4)); */
                 users.add(user);
 
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        } finally {
-            if (statement != null) {
-                statement.close();
-            }
-            if (connection != null) {
-                connection.close();
-            }
         }
         return users;
     }
