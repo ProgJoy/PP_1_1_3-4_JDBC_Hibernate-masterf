@@ -11,7 +11,7 @@ import org.hibernate.cfg.Configuration;
 import java.sql.SQLException;
 import java.util.List;
 
-public class UserServiceImpl extends Util implements UserService {
+public class UserServiceImpl implements UserService {
 
     //UserDaoJDBCImpl service;
     UserDaoHibernateImpl service;

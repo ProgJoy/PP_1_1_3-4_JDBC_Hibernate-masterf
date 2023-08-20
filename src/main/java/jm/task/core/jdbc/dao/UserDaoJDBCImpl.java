@@ -7,10 +7,11 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserDaoJDBCImpl extends Util implements UserDao {
+public class UserDaoJDBCImpl implements UserDao {
     Connection connection;
+    private Util util = new Util();
     public UserDaoJDBCImpl() {
-        connection = getConnection();
+        connection = util.getConnection();
     }
 
     public void createUsersTable() {
